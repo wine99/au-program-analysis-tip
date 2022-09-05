@@ -120,11 +120,11 @@ class TypeAnalysis(program: AProgram)(implicit declData: DeclarationData) extend
             unify(dw.exp, PointerType(as.right))
           case dfw: ADirectFieldWrite =>
             unify(dfw.id, RecordType(allFieldNames.map { f =>
-              if (f == dfw.field) Type.ast2typevar(as.right) else FreshVarType()
+              if (f == dfw.field) (as.right : Term[Type]) else FreshVarType()
             }))
           case ifw: AIndirectFieldWrite =>
             unify(ifw.exp, PointerType(RecordType(allFieldNames.map { f =>
-              if (f == ifw.field) Type.ast2typevar(as.right) else FreshVarType()
+              if (f == ifw.field) (as.right : Term[Type]) else FreshVarType()
             })))
         }
 
