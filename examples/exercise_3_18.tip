@@ -1,0 +1,8 @@
+main () {
+    var a,b,c,d;
+    a = {f:3, g:17};
+    b = a.f;
+    c = {f:alloc 5, h:15};
+    d = c.f;
+    return *d;
+}

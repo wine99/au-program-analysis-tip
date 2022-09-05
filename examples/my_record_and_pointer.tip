@@ -1,0 +1,12 @@
+main () {
+    var x, y;
+    x = {f: 1, g: 2};
+    y = &x;
+    x.f = 3;
+/*
+type analysis should reject this
+    (*y).g = {foo: 42};
+*/
+    (*y).g = 4;
+    return x.g + (*y).f;
+}

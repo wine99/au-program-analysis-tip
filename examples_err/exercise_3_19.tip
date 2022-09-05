@@ -1,0 +1,9 @@
+main () {
+    var a,b,c,d;
+    a = {f:null, g:17};
+    b = alloc {g:42, h:87};
+    a.f = b;
+    (*b).g = 117;
+    c = (*(a.f)).g;
+    return c;
+}
