@@ -1,0 +1,7 @@
+foo (f)
+    return 0;
+}
+
+main () {
+    return foo(foo);
+}

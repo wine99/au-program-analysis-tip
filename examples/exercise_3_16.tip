@@ -21,3 +21,14 @@ main() {
     }
     return map(h,foo,0);
 }
+
+/*
+main() {
+    var t, h;
+    t = null;
+    h = alloc null;
+    *h = t;
+    t = h;
+    return 0;
+}
+*/

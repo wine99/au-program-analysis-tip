@@ -1,0 +1,5 @@
+main () {
+    if (*1 == *(alloc 1))
+        output *(alloc 1);
+    return 0;
+}

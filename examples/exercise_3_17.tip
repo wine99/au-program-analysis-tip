@@ -1,0 +1,14 @@
+main () {
+    var n, x, y, a;
+    n = 2;
+    a = {c : 1, d : 2};
+    while (n > 0) {
+        if (n == 1) {
+            y = x.b;
+        } else {
+            x = {b : 42, c : 0};
+        }
+        n = n - 1;
+    }
+    return y;
+}
