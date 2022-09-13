@@ -120,11 +120,11 @@ class TypeAnalysis(program: AProgram)(implicit declData: DeclarationData) extend
             unify(dw.exp, PointerType(as.right))
           case dfw: ADirectFieldWrite =>
             unify(dfw.id, RecordType(allFieldNames.map { f =>
-              if (f == dfw.field) (as.right : Term[Type]) else FreshVarType()
+              if (f == dfw.field) (as.right: Term[Type]) else FreshVarType()
             }))
           case ifw: AIndirectFieldWrite =>
             unify(ifw.exp, PointerType(RecordType(allFieldNames.map { f =>
-              if (f == ifw.field) (as.right : Term[Type]) else FreshVarType()
+              if (f == ifw.field) (as.right: Term[Type]) else FreshVarType()
             })))
         }
 
@@ -141,7 +141,7 @@ class TypeAnalysis(program: AProgram)(implicit declData: DeclarationData) extend
       case un: AUnaryOp =>
         un.operator match {
           case DerefOp =>
-           unify(un.subexp, PointerType(un))
+            unify(un.subexp, PointerType(un))
         }
 
       case alloc: AAlloc => unify(node, PointerType(alloc.exp))
@@ -152,7 +152,6 @@ class TypeAnalysis(program: AProgram)(implicit declData: DeclarationData) extend
       case call: ACallFuncExpr =>
         unify(call.targetFun, FunctionType(call.args, call))
       case _: AReturnStmt =>
-
       case rec: ARecord =>
         val fieldmap = rec.fields.foldLeft(Map[String, Term[Type]]()) { (a, b) =>
           a + (b.field -> b.exp)
