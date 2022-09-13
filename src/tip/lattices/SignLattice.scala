@@ -92,4 +92,16 @@ object SignLattice extends FlatLattice[SignElement.Value] with LatticeWithOps {
   def eqq(a: Element, b: Element): Element = lookup(absEq, a, b)
 
   def gt(a: Element, b: Element): Element = lookup(absGt, a, b)
+
+  def check(op: (Element, Element) => Element): Boolean = {
+    val elements = signValues.keySet
+    for (a <- elements)
+      for (b <- elements)
+        for (c <- elements) {
+          if (leq(a, c) && !leq(op(a, b), op(c, b))
+            || leq(b, c) && !leq(op(a, b), op(a, c)))
+            return false
+        }
+    true
+  }
 }
