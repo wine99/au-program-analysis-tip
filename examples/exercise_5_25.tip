@@ -1,0 +1,7 @@
+main() {
+    var x,y,z;
+    x = input;
+    y = input;
+    z = x;
+    return y;
+}

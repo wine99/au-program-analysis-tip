@@ -1,0 +1,9 @@
+main(a,b) {
+    var x,y;
+    x = a+b;
+    if (x) { // warning: using integer as branch condition
+        output 17;
+    }
+    y = a>b;
+    return y+3; // warning: using boolean in addition
+}
