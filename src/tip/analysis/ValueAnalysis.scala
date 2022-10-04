@@ -69,10 +69,12 @@ trait ValueAnalysisMisc {
       case r: CfgStmtNode =>
         r.data match {
           // var declarations
-          case varr: AVarStmt => ??? //<--- Complete here
+          case varr: AVarStmt =>
+            varr.declIds.foldLeft(s)((m, a) => m + (a -> valuelattice.top))
 
           // assignments
-          case AAssignStmt(id: AIdentifier, right, _) => ??? //<--- Complete here
+          case AAssignStmt(id: AIdentifier, right, _) =>
+            s + ((id: ADeclaration) -> eval(right, s))
 
           // all others: like no-ops
           case _ => s
@@ -121,17 +123,32 @@ trait InterprocValueAnalysisFunctions extends MapLiftLatticeSolver[CfgNode] with
     * Overrides `funsub` from [[tip.solvers.MapLatticeSolver]] adding support for function calls and returns.
     */
   override def funsub(n: CfgNode, x: lattice.Element): liftedstatelattice.Element = {
-    //import cfg._ // gives easy access to the functionality in InterproceduralProgramCfg
+    import cfg._ // gives easy access to the functionality in InterproceduralProgramCfg
     import liftedstatelattice._
 
     new NormalizedCalls().assertContainsNode(n.data)
 
     n match {
       // function entry nodes
-      case funentry: CfgFunEntryNode => ??? //<--- Complete here
+      case funentry: CfgFunEntryNode =>
+        val fun = funentry.data
+        if (funentry == programEntry)
+          fun.params.foldLeft(statelattice.bottom)((m, p) => m + (p -> valuelattice.top))
+        else
+          callers(funentry).collect {
+            case pred if x(pred) != bottom =>
+              pred.data.right match {
+                case call_exp: ACallFuncExpr =>
+                  evalArgs(fun.params, call_exp.args, x(pred))
+              }
+          }.foldLeft(statelattice.bottom)((s, e) => statelattice.lub(s, e))
 
       // after-call nodes
-      case aftercall: CfgAfterCallNode => ??? //<--- Complete here
+      case aftercall: CfgAfterCallNode =>
+        val callerState = x(aftercall.callNode)
+        val exitState = x(calleeExits(aftercall).head)
+        if (callerState == bottom || exitState == bottom) bottom
+        else callerState + (aftercall.targetIdentifier.declaration -> exitState(AstOps.returnId))
 
       // return node
       case CfgStmtNode(_, _, _, ret: AReturnStmt) =>

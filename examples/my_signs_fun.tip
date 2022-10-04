@@ -1,0 +1,15 @@
+g() {
+    var i;
+    i = f(1, 2);
+    return i;
+}
+
+f(a, b) {
+    return a+b;
+}
+
+main(x) {
+    var y;
+    y = f(-1, -2);
+    return y;
+}
