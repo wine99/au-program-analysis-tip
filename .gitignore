@@ -6,5 +6,5 @@ out/
 /target
 /project
 .DS_Store
-
-.bsp/
+.bsp
+.attach_pid*
